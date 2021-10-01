@@ -1,0 +1,53 @@
+* {
+    font-family: 'Lato', sans-serif;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    align-content: center;
+    justify-content: flex-start;
+    background: #303030;
+}
+
+button {
+    padding: 0.25em;
+    font-weight: bold;
+    color: black;
+}
+
+div {
+    display: flex;
+    padding: 0.5em;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-content: center;
+}
+
+span {
+    margin: 0.25em;
+}
+
+input {
+    color: black;
+}
+
+#challenges .title {
+    font-weight: bold;
+}
+
+#challenges .red {
+    color: red;
+}
+
+#challenges .green {
+    color: green;
+}
