@@ -115,12 +115,25 @@ def challenge_check(func):
 async def check_alpha(ctx: TestContext, username: str):
     await ctx.set_user(username)
     await ctx.set_repository("Alpha")
+
     await ctx.set_branch("master")
     await ctx.commits(1)
     await ctx.file("README.md", "# Challenge: Alpha\nGet this directory pushed!\n")
     await ctx.file("file1", "")
     await ctx.file("file2", "")
     await ctx.file("file3", "")
+
+
+@challenge_check
+async def check_beta(ctx: TestContext, username: str):
+    await ctx.set_user(username)
+    await ctx.set_repository("Alpha")
+
+    await ctx.set_branch("revert_branch")
+    await ctx.commits(3)
+
+    await ctx.set_branch("erase_branch")
+    await ctx.commits(1)
 
 
 @app.get("/{username}/verify")
@@ -133,6 +146,7 @@ async def verify(username: str):
     # Get results
     results = {
         "Alpha": await check_alpha(username),
+        "Beta": await check_beta(username),
     }
 
     # Return results
