@@ -87,13 +87,22 @@ class TestContext:
                 f"of the {self.repository} repo, but I found {len(response)}"
             )
 
-    async def file(self, path: str, content: str = None):
+    async def file(self, path: str, content: str = ""):
         response = await api.get(f"/repos/{self.user}/{self.repository}/contents/{path}", params={"ref": self.ref})
         print("DEBUG File", response)
-        if content is not None and response.get("content") != content:
+        if response.get("content") != content:
             raise Exception(
                 f"The contents of the file '{path}' on the {self.ref} branch "
                 f"of the {self.repository} repo are incorrect."
+            )
+
+    async def no_file(self, path: str):
+        response = await api.get(f"/repos/{self.user}/{self.repository}/contents/{path}", params={"ref": self.ref})
+        print("DEBUG No File", response)
+        if response.get("content") is not None:
+            raise Exception(
+                f"The file '{path}' on the {self.ref} branch "
+                f"of the {self.repository} repo must not exist."
             )
 
 
@@ -127,13 +136,17 @@ async def check_alpha(ctx: TestContext, username: str):
 @challenge_check
 async def check_beta(ctx: TestContext, username: str):
     await ctx.set_user(username)
-    await ctx.set_repository("Alpha")
+    await ctx.set_repository("Beta")
 
     await ctx.set_branch("revert_branch")
     await ctx.commits(3)
+    await ctx.file("file_a", "Lorem\n")
+    await ctx.no_file("file_b")
 
     await ctx.set_branch("erase_branch")
     await ctx.commits(1)
+    await ctx.file("file_a", "Lorem\n")
+    await ctx.no_file("file_b")
 
 
 @app.get("/{username}/verify")

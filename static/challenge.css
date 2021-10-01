@@ -40,6 +40,10 @@ input {
     color: black;
 }
 
+#challenges {
+    flex-flow: column nowrap;
+}
+
 #challenges .title {
     font-weight: bold;
 }
