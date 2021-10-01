@@ -13,9 +13,9 @@ if not GITEA_URL.endswith('/'):
 arequests.global_params["access_token"] = GITEA_TOKEN
 
 
-app = FastAPI(root_path="/verify")
+app = FastAPI(root_path="/challenge")
 
 
-@app.post("/{username}")
+@app.get("/{username}/verify")
 async def verify(username):
     return {"username": username, "success": True}
