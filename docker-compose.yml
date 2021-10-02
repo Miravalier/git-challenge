@@ -1,12 +1,36 @@
 version: "3.0"
 
+networks:
+  gitea:
+    external: false
+
 services:
-    api:
-        container_name: git_challenge
-        build: .
+    gitea:
+        image: gitea/gitea:latest
+        container_name: gitea
         restart: always
+        networks:
+            - gitea
+        volumes:
+            - /var/gitea:/data
+            - /etc/timezone:/etc/timezone:ro
+            - /etc/localtime:/etc/localtime:ro
         ports:
-            - "${HTTP_PORT}:80"
+            - "${GITEA_HTTP_PORT}:3000"
+            - "${GITEA_SSH_PORT}:22"
         environment:
-            - "GITEA_URL=${GITEA_URL}"
+            - USER_UID=1001
+            - USER_GID=1001
+
+    challenge:
+        build: .
+        container_name: gitea_challenge
+        restart: always
+        networks:
+            - gitea
+        volumes:
+            - /var/gitea:/data
+        ports:
+            - "${GITEA_CHALLENGE_HTTP_PORT}:80"
+        environment:
             - "GITEA_TOKEN=${GITEA_TOKEN}"

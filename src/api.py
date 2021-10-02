@@ -4,13 +4,10 @@ import os
 
 # Environment variables
 GITEA_TOKEN = os.environ['GITEA_TOKEN']
-GITEA_URL = os.environ['GITEA_URL']
-if GITEA_URL.endswith('/'):
-    GITEA_URL = GITEA_URL[:-1]
 
 
 # Global configuration
-arequests.base_url = GITEA_URL
+arequests.base_url = "http://gitea:3000/api/v1"
 arequests.global_params["access_token"] = GITEA_TOKEN
 
 
@@ -36,6 +33,7 @@ async def create_user(username: str, password: str) -> dict:
         "visibility": "private",
     })
 
+
 async def create_repo(username: str, repo: str, description: str = None) -> dict:
     body = {
         "name": repo,
@@ -46,6 +44,7 @@ async def create_repo(username: str, repo: str, description: str = None) -> dict
         body["description"] = description
 
     return await post(f"/admin/users/{username}/repos", body=body)
+
 
 async def add_key(username: str, title: str, key: str) -> dict:
     body = {
