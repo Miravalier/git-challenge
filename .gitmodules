@@ -1,0 +1,3 @@
+[submodule "submodules/Beta"]
+	path = submodules/Beta
+	url = https://git.miramontes.dev/Miravalier/Beta.git

@@ -1,6 +1,6 @@
 DOMAIN = git.challenge.local
 
-.PHONY: help nginx docker create_user delete_user deps
+.PHONY: help nginx docker create_api_user delete_api_user deps
 
 help:
 	@echo "make help"
@@ -12,13 +12,13 @@ help:
 	@echo "sudo make nginx"
 	@echo "  Serve the application on the domain $(DOMAIN)"
 	@echo
-	@echo "make create_user"
-	@echo "  Create a new admin user with the username 'challenge',"
+	@echo "make create_api_user"
+	@echo "  Create a new admin user with the username 'challenge_api',"
 	@echo "  then put that user's access token into .env and restart"
 	@echo "  the docker container"
 	@echo
-	@echo "make delete_user"
-	@echo "  Delete the 'challenge' user"
+	@echo "make delete_api_user"
+	@echo "  Delete the 'challenge_api' user"
 	@echo
 	@echo "make deps"
 	@echo "  List the dependencies needed for this Makefile"
@@ -45,16 +45,18 @@ docker:
 	docker-compose build
 	docker-compose up -d
 
-create_user:
+create_api_user:
 	@TOKEN="$$(docker-compose exec gitea su git -c \
-		"gitea admin user create --username challenge --admin --access-token --email challenge@$(DOMAIN) --random-password" \
+		"gitea admin user create --username challenge_api --admin --access-token --email challenge_api@$(DOMAIN) --random-password" \
 		| grep -Eo "[a-fA-F0-9]{40,120}")" && \
 		sed -Ei "s/GITEA_TOKEN=.*/GITEA_TOKEN=$$TOKEN/g" .env
+	@echo "User 'challenge_api' created"
 	docker-compose rm -fsv challenge
 	docker-compose up -d challenge
+	@echo "Container restarted"
 
-delete_user:
-	docker-compose exec gitea su git -c "gitea admin user delete --username challenge"
+delete_api_user:
+	docker-compose exec gitea su git -c "gitea admin user delete --username challenge_api"
 
 deps:
 	@echo "python3\ndocker\ndocker-compose\nnginx\nsed"
