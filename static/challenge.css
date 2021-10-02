@@ -55,3 +55,7 @@ input {
 #challenges .green {
     color: green;
 }
+
+span.error {
+    text-align: center;
+}
