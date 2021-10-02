@@ -1,7 +1,7 @@
-.PHONY: help nginx
+.PHONY: help nginx docker
 
 help:
-	@echo "Make Commands: make help, sudo make nginx"
+	@echo "make help, make docker, sudo make nginx"
 
 SITE_AVAILABLE := /etc/nginx/sites-available/git.challenge.local
 SITE_ENABLED := /etc/nginx/sites-enabled/git.challenge.local
@@ -15,3 +15,10 @@ nginx:
 	. ./.env; sed -i "s/{GITEA_CHALLENGE_HTTP_PORT}/$$GITEA_CHALLENGE_HTTP_PORT/" $(SITE_AVAILABLE)
 	ln -s $(SITE_AVAILABLE) $(SITE_ENABLED)
 	service nginx restart
+	@echo "Gitea reachable at http://git.challenge.local/"
+	@echo "Challenge reachable at http://git.challenge.local/challenge/"
+
+docker:
+	docker-compose down
+	docker-compose build
+	docker-compose up -d
