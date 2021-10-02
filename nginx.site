@@ -1,7 +1,6 @@
 server {
-    server_name git.challenge.local;
+    server_name {DOMAIN};
 
-    root /var/www/git;
     index index.html;
     error_page 404 /404.html;
 
